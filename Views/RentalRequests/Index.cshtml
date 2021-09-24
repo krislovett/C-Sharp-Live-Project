@@ -1,0 +1,180 @@
+﻿@model IEnumerable<TheatreCMS3.Areas.Rent.Models.RentalRequest>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+<button class="btn">@Html.ActionLink("Create New", "Create")</button>
+
+<div class="rr-buttons">
+    <button id="rr-expired-toggle" class="rr-btn rr-toggle-btn btn">Expired Rentals</button>
+    <button id="rr-active-toggle" class="rr-btn rr-toggle-btn btn">Current Rentals</button>
+</div>
+
+@{int i = 0;}
+<div class="accordion" id="rr-active-requests">
+    @foreach (var item in Model)
+    {
+        string startTimeShortTime = item.StartTime.ToShortTimeString();
+        string startTimeLongDate = item.StartTime.ToLongDateString();
+        string endTimeShortTime = item.EndTime.ToShortTimeString();
+        string endTimeLongDate = item.EndTime.ToLongDateString();
+
+        TimeSpan timeTillStart = (item.StartTime - DateTime.Now);
+        string timeTillStartString = $"{timeTillStart.ToString("%d")} days, {timeTillStart.ToString("%h")} hours, {timeTillStart.ToString("%m")} minutes";
+
+        TimeSpan timeRemaining = (item.EndTime - DateTime.Now);
+        string timeRemainingString = $"{timeRemaining.ToString("%d")} days, {timeRemaining.ToString("%h")} hours, {timeRemaining.ToString("%m")} minutes";
+
+        bool expired = item.EndTime < DateTime.Now;
+
+        if (!expired)
+        {
+            <div class="card">
+                <div class="card-header rr-header">
+                    <button class="btn btn-block text-left" type="button" data-toggle="collapse" data-target="#request_@i" aria-expanded="false" aria-controls="request_@i">
+                        <h1 class="mb-0">@Html.DisplayFor(modelItem => item.Company)</h1>
+                        <h2>@Html.DisplayFor(modelItem => item.ContactPerson)</h2>
+                        @{
+                            if (DateTime.Now < item.StartTime)
+                            {
+                                <h3 class="rr-time-start-remaining">Time Until Start: @timeTillStartString</h3>
+                            }
+                            else
+                            {
+                                <h3 class="rr-time-start-remaining">Time Remaining: @timeRemainingString</h3>
+                            }
+                        }
+                    </button>
+                </div>
+
+                <div class="collapse" id="request_@i">
+                    <div class="card-body rr-body">
+                        <div class="rr-request-times">
+                            <div class="rr-request-start-time">
+                                <h3>Start Time</h3>
+                                <h4>
+                                    @Html.DisplayFor(modelItem => startTimeShortTime)
+                                </h4>
+                                <h5>
+                                    @Html.DisplayFor(modelItem => startTimeLongDate)
+                                </h5>
+                            </div>
+                            <div class="rr-request-end-time">
+                                <h3>End Time</h3>
+                                <h4>
+                                    @Html.DisplayFor(modelItem => endTimeShortTime)
+                                </h4>
+                                <h5>
+                                    @Html.DisplayFor(modelItem => endTimeLongDate)
+                                </h5>
+                            </div>
+                        </div>
+
+                        <p><b>Rental Code: </b>@Html.DisplayFor(modelItem => item.RentalCode)</p>
+                        <p><b>Project Info: </b>@Html.DisplayFor(modelItem => item.ProjectInfo)</p>
+                        <p><b>Rentals: </b></p>
+                        <p><b>Accepted: </b>@Html.DisplayFor(modelItem => item.Accepted)</p>
+                        <p><b>Contract Signed: </b>@Html.DisplayFor(modelItem => item.ContractSigned)</p>
+                        <p><b>Ignore Survey? </b>@Html.DisplayFor(modelItem => item.IgnoreSurveyPrompt)</p>
+                        @if (DateTime.Now >= item.EndTime.AddDays(-1) && DateTime.Now <= item.EndTime.AddDays(7))
+                        {
+                            <button>Fill out a rental survey</button>
+                            <button>Ignore Survey</button>
+                        }
+
+                        @*@if (DateTime.Now > item.EndTime.AddDays(7))
+                        {
+                            item.IgnoreSurvey();
+                        }*@
+
+                        @Html.ActionLink("Edit", "Edit", new { id = item.RentalRequestID }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.RentalRequestID }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.RentalRequestID })
+                    </div>
+                </div>
+            </div>
+            i++;
+        }
+    }
+</div>
+
+<div id="rr-expired-requests" class="accordion">
+    @foreach (var item in Model.OrderByDescending(item => item.StartTime))
+    {
+        string startTimeShortTime = item.StartTime.ToShortTimeString();
+        string startTimeLongDate = item.StartTime.ToLongDateString();
+        string startTimeShortDate = item.StartTime.ToShortDateString();
+        string endTimeShortTime = item.EndTime.ToShortTimeString();
+        string endTimeLongDate = item.EndTime.ToLongDateString();
+        string endTimeShortDate = item.EndTime.ToShortDateString();
+
+        TimeSpan timeTillStart = (item.StartTime - DateTime.Now);
+        string timeTillStartString = $"{timeTillStart.ToString("%d")} days, {timeTillStart.ToString("%h")} hours, {timeTillStart.ToString("%m")} minutes";
+
+        TimeSpan timeRemaining = (item.EndTime - DateTime.Now);
+        string timeRemainingString = $"{timeRemaining.ToString("%d")} days, {timeRemaining.ToString("%h")} hours, {timeRemaining.ToString("%m")} minutes";
+
+        bool expired = item.EndTime.AddDays(7) < DateTime.Now;
+
+        if (expired)
+        {
+            <div class="card">
+                <div class="card-header rr-header rr-expired">
+                    <button class="btn btn-block text-left" type="button" data-toggle="collapse" data-target="#request_@i" aria-expanded="false" aria-controls="request_@i">
+                        <h1 class="mb-0">@Html.DisplayFor(modelItem => item.Company)</h1>
+                        <h2>@Html.DisplayFor(modelItem => item.ContactPerson)</h2>
+                        <h3 class="rr-time-start-remaining">@startTimeShortDate, @startTimeShortTime - @endTimeShortDate, @endTimeShortTime</h3>
+                    </button>
+                </div>
+
+                <div class="collapse" id="request_@i">
+                    <div class="card-body rr-body">
+                        <div class="rr-request-times">
+                            <div class="rr-request-start-time">
+                                <h3>Start Time</h3>
+                                <h4>
+                                    @Html.DisplayFor(modelItem => startTimeShortTime)
+                                </h4>
+                                <h5>
+                                    @Html.DisplayFor(modelItem => startTimeLongDate)
+                                </h5>
+                            </div>
+                            <div class="rr-request-end-time">
+                                <h3>End Time</h3>
+                                <h4>
+                                    @Html.DisplayFor(modelItem => endTimeShortTime)
+                                </h4>
+                                <h5>
+                                    @Html.DisplayFor(modelItem => endTimeLongDate)
+                                </h5>
+                            </div>
+                        </div>
+
+                        <p><b>Rental Code: </b>@Html.DisplayFor(modelItem => item.RentalCode)</p>
+                        <p><b>Project Info: </b>@Html.DisplayFor(modelItem => item.ProjectInfo)</p>
+                        <p><b>Rentals: </b></p>
+                        <p><b>Accepted: </b>@Html.DisplayFor(modelItem => item.Accepted)</p>
+                        <p><b>Contract Signed: </b>@Html.DisplayFor(modelItem => item.ContractSigned)</p>
+                        <p><b>Survey: </b></p>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.RentalRequestID }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.RentalRequestID }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.RentalRequestID })
+                    </div>
+                </div>
+            </div>
+            i++;
+        }
+    }
+</div>
+
+<script>
+    $(".rr-toggle-btn").click(function () {
+        $("#rr-active-requests").toggle();
+        $("#rr-expired-requests").toggle();
+        $("#rr-active-toggle").toggle();
+        $("#rr-expired-toggle").toggle();
+    })
+</script>

@@ -1,0 +1,164 @@
+﻿/* ▼ This ▼ is for you to easily reference the colors on the Site.css page */
+/* Do not uncomment these color variables */
+
+/* CSS color variables */
+/*:root {*/ /* Color palette for css */
+/*--main-color: #DB1A11;*/ /* Red */
+/*--main-color--light: #F04D44;*/ /* Red, a shade lighter */
+/*--secondary-color: #D6972A;*/ /* Yellow gold */
+/*--light-color: #FFFBFB;*/ /* White */
+/*--dark-color: #000000;*/ /* Black */
+/*--secondary-color--dark: #9D7C39;*/ /* Dark Gold */
+/*--light-blue: rgb(93, 123, 244)*/ /*Light Blue - Added color on top of original*/
+/*}*/
+
+/* Styles for Index view */
+#RentalHistoryIndex {
+    text-align: left;
+    width: 600px;
+    background-color: var(--light-color);
+    color: var(--dark-color);
+    border-color: var(--main-color);
+    border-style: solid;
+    border-radius: 15px;
+    border-width: 2px;
+    padding: 5px 15px 10px 15px;
+}
+
+    #RentalHistoryIndex .row {
+        border-bottom: 5px;
+        margin: 0 10px;
+    }
+
+        #RentalHistoryIndex .row > div {
+            margin: 1px 5px;
+        }
+
+    #RentalHistoryIndex .rental {
+        background-color: var(--dark-color);
+        color: var(--light-color);
+        border-radius: 3px;
+    }
+
+    #RentalHistoryIndex .menu button {
+        border: 0;
+    }
+/* End styles for Index view */
+
+/* Styles for Create and Edit views */
+.body-content {
+    text-align: center;
+}
+
+.form-horizontal {
+    max-width: 600px;
+    text-align: left;
+    border-radius: 15px;
+    background-color: var(--main-color);
+}
+
+.checkbox {
+    text-align: center;
+}
+
+.control-label {
+    margin-left: 0;
+}
+
+/*======= Rental Request Styling ========*/
+#rr-active-requests {
+    display: block;
+}
+
+#rr-expired-requests {
+    display: none;
+}
+
+#rr-expired-toggle {
+    display: block;
+}
+
+#rr-active-toggle {
+    display: none;
+}
+
+.rr-buttons {
+    width: 100%;
+    margin: auto;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: right;
+}
+
+.rr-btn {
+    background-color: var(--secondary-color);
+    color: var(--dark-color);
+}
+
+.rr-btn a {
+    color: var(--dark-color);
+}
+
+.rr-btn a:hover {
+    text-decoration: none;
+}
+
+.rr-header {
+    background-color: var(--main-color--light);
+    border: none;
+}
+
+.rr-expired {
+    background-color: var(--secondary-color--dark);
+}
+
+.rr-header:hover h1, .rr-header:hover h2, .rr-header:hover h3 {
+    text-decoration: underline;
+    text-decoration-color: var(--secondary-color);
+}
+
+.rr-header button:focus {
+    border: none;
+    box-shadow: none;
+}
+
+.rr-header h1, .rr-header h2, .rr-header h3 {
+    color: var(--light-color);
+}
+
+.rr-header h1 {
+    font-size: 30px;
+}
+
+.rr-header h2 {
+    font-size: 24px;
+    float: left;
+}
+
+.rr-body {
+    color: var(--dark-color);
+}
+
+.rr-body p {
+    text-align: left;
+}
+
+.rr-request-times {
+    width: 80%;
+    margin: auto;
+    margin-bottom: 20px;
+    display: flex;
+}
+
+.rr-time-start-remaining {
+    float: right;
+    font-size: 22px;
+}
+
+.rr-request-start-time {
+    flex: 50%;
+}
+
+.rr-request-end-time {
+    flex: 50%;
+}
